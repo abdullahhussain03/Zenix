@@ -1,0 +1,526 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap");
+
+/* Netflix-style layout */
+:root {
+  --nf-black: #141414;
+  --nf-deep: #0b0b0b;
+  --nf-red: #e50914;
+  --nf-red-dark: #b20710;
+  --nf-muted: #b3b3b3;
+  --nf-white: #fff;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--nf-deep);
+  color: var(--nf-white);
+  font-family: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.app-netflix-shell {
+  min-height: 100vh;
+}
+
+/* Navbar */
+.netflix-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 2.25rem;
+  background: linear-gradient(180deg, rgba(11,11,11,0.92) 0%, rgba(11,11,11,0.5) 100%);
+}
+
+.brand-link {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--nf-red);
+  text-decoration: none;
+}
+
+.nav-links-simple a,
+.nav-right-simple a {
+  color: var(--nf-white);
+  margin-right: 1rem;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.nav-links-simple a:hover {
+  color: var(--nf-red);
+}
+
+.muted-link {
+  color: var(--nf-muted);
+  font-size: 0.85rem;
+}
+
+.nav-text-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.nav-text-btn:hover {
+  color: white;
+}
+
+.nav-right-simple {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Rows */
+.section-heading {
+  margin: 1.75rem 2.25rem 0.5rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.row-scroll {
+  display: flex;
+  gap: 0.85rem;
+  overflow-x: auto;
+  padding: 0 2.25rem 2rem;
+  scroll-snap-type: x proximity;
+}
+
+.netflix-card-link {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+.netflix-card {
+  width: 160px;
+  border-radius: 6px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.45);
+  background: #222;
+}
+
+.netflix-card:hover {
+  transform: scale(1.06);
+  box-shadow: 0 16px 30px rgba(229, 9, 20, 0.25);
+}
+
+.netflix-card img {
+  width: 100%;
+  height: 238px;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.netflix-placeholder {
+  height: 238px;
+  display: grid;
+  place-items: center;
+  font-size: 0.85rem;
+  color: var(--nf-muted);
+  background: #333;
+}
+
+.netflix-placeholder.big {
+  min-height: 420px;
+  width: 100%;
+}
+
+.netflix-card-info {
+  padding: 10px;
+}
+
+.netflix-card-info h3 {
+  margin: 0 0 4px;
+  font-size: 0.92rem;
+  line-height: 1.25;
+}
+
+.netflix-meta {
+  margin: 0;
+  font-size: 0.72rem;
+  color: var(--nf-muted);
+}
+
+/* Hero */
+.netflix-hero {
+  position: relative;
+  min-height: 52vh;
+  margin-bottom: 0.75rem;
+}
+
+.netflix-hero-bg {
+  position: absolute;
+  inset: 0;
+}
+
+.netflix-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.75;
+}
+
+.netflix-hero-fallback {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(120deg, #2a0610, var(--nf-black));
+}
+
+.netflix-hero-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(15,15,15,1) 20%, transparent 72%),
+    linear-gradient(0deg, var(--nf-deep), transparent);
+}
+
+.netflix-hero-content {
+  position: relative;
+  padding: 4rem 2.25rem;
+  max-width: 620px;
+}
+
+.netflix-brand-sm {
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  color: var(--nf-red);
+  margin: 0 0 0.5rem;
+}
+
+.netflix-hero h1 {
+  margin: 0;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 800;
+}
+
+.netflix-hero-teaser {
+  margin: 1rem 0 1.75rem;
+  color: var(--nf-muted);
+  line-height: 1.65;
+}
+
+.hero-buttons-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btn-netflix-primary,
+.btn-netflix-outline,
+.btn-netflix-muted {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.62rem 1.5rem;
+  border-radius: 4px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  font-size: 0.95rem;
+}
+
+.btn-netflix-primary {
+  background: var(--nf-white);
+  color: var(--nf-black);
+}
+
+.btn-netflix-primary:hover {
+  background: #eaeaea;
+}
+
+.btn-netflix-outline {
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  color: white;
+}
+
+.btn-netflix-outline:hover {
+  border-color: var(--nf-muted);
+}
+
+.btn-netflix-muted {
+  cursor: default;
+  background: transparent;
+  color: var(--nf-muted);
+  border: 1px dashed #444;
+}
+
+.btn-netflix-primary.block {
+  width: 100%;
+}
+
+.details-buttons-row {
+  display: flex;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+/* Movie detail */
+.movie-details {
+  padding: 0 0 4rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.details-hero {
+  display: flex;
+  gap: 2.25rem;
+  align-items: flex-start;
+  padding: 2rem 2.25rem;
+  flex-wrap: wrap;
+}
+
+.details-poster {
+  width: 280px;
+  min-width: 240px;
+  border-radius: 8px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
+  object-fit: cover;
+}
+
+.details-info {
+  flex: 1;
+  min-width: 240px;
+}
+
+.details-title {
+  font-size: 2.2rem;
+  margin: 0 0 0.5rem;
+}
+
+.details-meta-netflix {
+  margin: 0.25rem 0;
+  color: var(--nf-muted);
+}
+
+.details-meta-netflix.muted {
+  font-size: 0.95rem;
+}
+
+.director-line {
+  font-size: 0.9rem;
+  color: #ddd;
+  margin: 0.35rem 0;
+}
+
+.details-description {
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: #ccc;
+  margin: 1rem 0 1.5rem;
+}
+
+.trailer-section {
+  padding: 0 2.25rem;
+}
+
+.trailer-section h2 {
+  font-size: 1.4rem;
+  margin-bottom: 0.75rem;
+  border: none;
+  padding: 0;
+  display: block;
+}
+
+.trailer-wrapper {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #000;
+}
+
+.trailer-wrapper video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.netflix-muted {
+  color: var(--nf-muted);
+}
+
+.netflix-muted.padded {
+  padding: 0 2.25rem;
+}
+
+.netflix-accent {
+  color: var(--nf-red);
+}
+
+.loading-screen {
+  padding: 4rem;
+  text-align: center;
+  color: var(--nf-muted);
+}
+
+@media (max-width: 700px) {
+  .details-hero {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .details-poster {
+    width: 100%;
+  }
+}
+
+/* Comments */
+.comments-section {
+  margin-top: 2.5rem;
+  padding: 0 2.25rem;
+}
+
+.comments-section h3 {
+  border: none;
+  margin: 0 0 1rem;
+  padding: 0;
+  display: block;
+}
+
+.comment-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.netflix-comment-name {
+  max-width: 240px;
+  padding: 0.7rem 1rem;
+  border-radius: 4px;
+  border: 1px solid #333;
+  background: #181818;
+  color: white;
+}
+
+.comment-row-netflix {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.comment-row-netflix input {
+  flex: 1;
+  padding: 0.85rem 1rem;
+  border-radius: 4px;
+  border: none;
+  background: #333;
+  color: white;
+}
+
+.comment-row-netflix button {
+  padding: 0.85rem 1.75rem;
+  border: none;
+  border-radius: 4px;
+  background: var(--nf-red);
+  color: white;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.comment-row-netflix button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.comment-item {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+}
+
+.comment-content {
+  background: #242424;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  max-width: 540px;
+}
+
+.username {
+  display: block;
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--nf-muted);
+  margin-bottom: 0.2rem;
+}
+
+.not-found-msg {
+  text-align: center;
+  padding: 4rem;
+}
+
+.ghost-btn {
+  margin-top: 1rem;
+  background: none;
+  border: 1px solid #555;
+  color: white;
+  padding: 0.5rem 1.25rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Booking picker */
+.booking-page-inner {
+  padding: 2rem 2.25rem 4rem;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.booking-page-inner.narrow {
+  max-width: 460px;
+}
+
+.pick-show-inner h1 {
+  margin-top: 0;
+}
+
+.showtime-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.75rem 0;
+}
+
+.showtime-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 0.85rem;
+  background: rgba(255,255,255,0.05);
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.back-link-btn {
+  background: transparent;
+  border: none;
+  color: var(--nf-muted);
+  text-decoration: underline;
+  cursor: pointer;
+}

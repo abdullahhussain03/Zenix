@@ -1,0 +1,105 @@
+.manage-movies-page {
+  background-color: #0f0f1a;
+  min-height: 100vh;
+  color: white;
+}
+
+.main-content {
+  padding: 30px;
+}
+
+.page-title {
+  color: white;
+  margin-bottom: 30px;
+}
+
+.search-bar {
+  margin-bottom: 30px;
+}
+
+.search-input {
+  width: 100%;
+  max-width: 400px;
+  padding: 12px 20px;
+  background-color: #1a1a2e;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: white;
+  font-size: 15px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #8EA4D2;
+}
+
+.movies-table {
+  background-color: #1a1a2e;
+  border-radius: 15px;
+  padding: 20px;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead th {
+  text-align: left;
+  padding: 15px;
+  color: #8EA4D2;
+  border-bottom: 2px solid #333;
+}
+
+tbody td {
+  padding: 15px;
+  border-bottom: 1px solid #333;
+}
+
+.table-poster {
+  width: 60px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.status-badge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.status-badge.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.status-badge.upcoming {
+  background-color: #FF9800;
+  color: white;
+}
+
+.btn-edit, .btn-delete {
+  padding: 6px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  color: white;
+  font-size: 13px;
+  margin-right: 5px;
+}
+
+.btn-edit { background-color: #2196F3; }
+.btn-delete { background-color: #f44336; }
+
+.btn-edit:hover { background-color: #1976D2; }
+.btn-delete:hover { background-color: #d32f2f; }
+
+.loading {
+  color: #aaa;
+  text-align: center;
+  padding: 50px;
+}

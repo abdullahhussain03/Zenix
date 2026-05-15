@@ -1,0 +1,185 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
+
+.wajeeha-booking-page {
+  background: #111;
+  min-height: calc(100vh - 52px);
+  padding: 1.25rem 1rem 2.5rem;
+  text-align: center;
+}
+
+.wajeeha-booking-heading {
+  font-family: "Bebas Neue", sans-serif;
+  color: #cc1111;
+  letter-spacing: 0.05em;
+  margin: 0 0 0.35rem;
+}
+
+.wajeeha-booking-meta {
+  color: #888;
+  font-size: 0.82rem;
+  margin: 0 0 1.25rem;
+}
+
+/* ── From Wajeeha SeatSelector.css ── */
+.theatre-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+.seat-row-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 6px;
+}
+
+.row-label {
+  color: #cc1111;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 14px;
+  width: 20px;
+}
+
+.seat-row {
+  display: flex;
+  gap: 6px;
+}
+
+.seat {
+  width: 30px;
+  height: 26px;
+  background: #2a2a2a;
+  color: #555;
+  font-size: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.seat.selected {
+  background: #cc1111;
+  color: white;
+  box-shadow: 0 0 8px rgba(204, 17, 17, 0.6);
+}
+
+.seat.occupied {
+  background: #151515;
+  cursor: not-allowed;
+}
+
+.payment-method-title {
+  color: #cc1111;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 28px;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+
+.method-selector {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 15px;
+}
+
+.m-btn {
+  flex: 1;
+  background: #111;
+  border: 1px solid #333;
+  color: #666;
+  padding: 8px;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.m-btn.active {
+  border-color: #cc1111;
+  color: white;
+}
+
+.info-section,
+.payment-card {
+  width: 100%;
+  max-width: 450px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.zenix-input {
+  background: #161616;
+  border: 1px solid #222;
+  padding: 12px;
+  color: white;
+  border-radius: 2px;
+  font-size: 13px;
+}
+
+.selection-summary {
+  padding: 12px;
+  border: 1px dashed #444;
+  color: #888;
+  font-size: 11px;
+  text-align: center;
+}
+
+.confirm-btn {
+  background: #cc1111;
+  color: white;
+  border: none;
+  padding: 14px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.white-text {
+  color: #fff;
+  font-family: "Bebas Neue", sans-serif;
+  letter-spacing: 2px;
+  font-size: 24px;
+}
+
+.back-link {
+  background: none;
+  border: none;
+  color: #555;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.success-card {
+  text-align: center;
+  padding: 40px;
+  background: #111;
+}
+
+.wajeeha-screen-bar {
+  width: min(450px, 100%);
+  text-align: center;
+  letter-spacing: 0.45em;
+  font-size: 0.72rem;
+  color: #666;
+  margin-bottom: 6px;
+  font-family: "Bebas Neue", sans-serif;
+}
+
+.wajeeha-cancel-small {
+  background: transparent;
+  border: none;
+  color: #555;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 12px;
+  margin-top: 4px;
+}

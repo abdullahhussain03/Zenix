@@ -1,0 +1,8 @@
+node_modules/
+uploads/
+*.mp4
+*.MP4
+*.mkv
+*.avi
+user/userpanel/public/assets/trailers/
+user/userpanel/public/assets/posters/
