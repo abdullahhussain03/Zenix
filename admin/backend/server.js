@@ -68,7 +68,7 @@ async function seedMoviesIfDbEmpty() {
   }
 }
 
-app.post("/api/reseed", async (req, res) => {
+app.get("/api/reseed", async (req, res) => {
   try {
     await Movie.deleteMany({});
     await Show.deleteMany({});
