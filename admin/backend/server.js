@@ -70,13 +70,13 @@ const mongooseOpts = {
 mongoose
   .connect(mongoUri, mongooseOpts)
   .then(async () => {
-    console.log("✅ Connected to MongoDB");
+    console.log("Connected to MongoDB");
     await seedMoviesIfDbEmpty();
     app.listen(PORT, () => {
-      console.log(`🚀 Backend running on http://localhost:${PORT}`);
+      console.log(`Backend running on http://localhost:${PORT}`);
     });
   })
   .catch((err) => {
-    console.error("❌ MongoDB connection failed:", err.message);
+    console.error("MongoDB connection failed:", err.message);
     process.exit(1);
   });
