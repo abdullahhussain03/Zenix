@@ -18,9 +18,13 @@ const authRoutes = require("./routes/authRoutes");
 const Movie = require("./models/Movie");
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+const FRONTEND_URL = process.env.FRONTEND_URL || "https://zenix-ten.vercel.app";
+app.use(cors({
+  origin: [FRONTEND_URL, "http://localhost:3000"],
+  credentials: true
+}));
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
