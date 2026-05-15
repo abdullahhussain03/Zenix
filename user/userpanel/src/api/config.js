@@ -6,7 +6,9 @@ const envUrl =
 const API_BASE =
   envUrl.length > 0
     ? envUrl.replace(/\/$/, "")
-    : "http://localhost:5000" 
+    : process.env.NODE_ENV === "production"
+      ? "https://zenix-pi5s.onrender.com"
+      : "http://localhost:5000" 
 
 export function mediaUrl(localPath) {
   if (!localPath) {
