@@ -1,26 +1,60 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");
+const { v2: cloudinary } = require("cloudinary");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
 const Movie = require("../models/Movie");
 const Show = require("../models/Show");
 const Booking = require("../models/Booking");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "uploads/"),
-  filename: (req, file, cb) => {
-    const uniqueName = `${Date.now()}-${uuidv4()}${path.extname(file.originalname)}`;
-    cb(null, uniqueName);
-  }
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const upload = multer({ 
-  storage: storage, 
-  limits: { fileSize: 100 * 1024 * 1024 }
+const posterStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "zenix/posters",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
+    resource_type: "image",
+  },
 });
+
+const trailerStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "zenix/trailers",
+    allowed_formats: ["mp4", "mov", "avi"],
+    resource_type: "video",
+  },
+});
+
+const uploadPoster = multer({ storage: posterStorage });
+const uploadTrailer = multer({ storage: trailerStorage });
+
+const uploadFields = (req, res, next) => {
+  uploadPoster.single("poster")(req, res, (err) => {
+    if (err) return next(err);
+    uploadTrailer.single("trailer")(req, res, next);
+  });
+};
+
+const deleteFromCloudinary = async (url, resourceType = "image") => {
+  if (!url) return;
+  try {
+    const parts = url.split("/");
+    const folder = parts[parts.length - 2];
+    const filename = parts[parts.length - 1].split(".")[0];
+    const publicId = `${folder}/${filename}`;
+    await cloudinary.uploader.destroy(publicId, { resource_type: resourceType });
+  } catch (err) {
+    console.error("Cloudinary delete error:", err);
+  }
+};
 
 router.get("/", async (req, res) => {
   try {
@@ -31,19 +65,16 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", upload.fields([
-  { name: "poster", maxCount: 1 },
-  { name: "trailer", maxCount: 1 }
-]), async (req, res) => {
+router.post("/", uploadFields, async (req, res) => {
   try {
     const body = req.body;
-    let posterUrl = req.files?.poster ? `/uploads/${req.files.poster[0].filename}` : null;
-    let trailerUrl = req.files?.trailer ? `/uploads/${req.files.trailer[0].filename}` : null;
+    const posterUrl = req.files?.poster?.[0]?.path || req.file?.path || null;
+    const trailerUrl = req.files?.trailer?.[0]?.path || null;
 
     const newMovie = await Movie.create({
       id: uuidv4(),
       ...body,
-      poster: posterUrl,
+      poster: posterUrl,   // now a full https://cloudinary.com/... URL
       trailer: trailerUrl,
       comments: []
     });
@@ -82,12 +113,8 @@ router.delete("/:id", async (req, res) => {
     const movie = await Movie.findOne({ id: req.params.id });
     if (!movie) return res.status(404).json({ message: "Movie not found" });
 
-    [movie.poster, movie.trailer].forEach(filePath => {
-      if (filePath) {
-        const fullPath = path.join(__dirname, '..', filePath);
-        if (fs.existsSync(fullPath)) fs.unlinkSync(fullPath);
-      }
-    });
+    await deleteFromCloudinary(movie.poster, "image");
+    await deleteFromCloudinary(movie.trailer, "video");
 
     await Booking.deleteMany({ movieId: movie.id });
     await Show.deleteMany({ movieId: movie.id });
@@ -99,31 +126,21 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-router.put("/:id", upload.fields([
-  { name: "poster", maxCount: 1 },
-  { name: "trailer", maxCount: 1 }
-]), async (req, res) => {
+router.put("/:id", uploadFields, async (req, res) => {
   try {
     const movie = await Movie.findOne({ id: req.params.id });
     if (!movie) return res.status(404).json({ message: "Movie not found" });
 
-    const body = req.body;
-    const updates = { ...body };
+    const updates = { ...req.body };
 
-    if (req.files?.poster) {
-      if (movie.poster) {
-        const oldPath = path.join(__dirname, '..', movie.poster);
-        if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
-      }
-      updates.poster = `/uploads/${req.files.poster[0].filename}`;
+    if (req.files?.poster?.[0]) {
+      await deleteFromCloudinary(movie.poster, "image");
+      updates.poster = req.files.poster[0].path;
     }
 
-    if (req.files?.trailer) {
-      if (movie.trailer) {
-        const oldPath = path.join(__dirname, '..', movie.trailer);
-        if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
-      }
-      updates.trailer = `/uploads/${req.files.trailer[0].filename}`;
+    if (req.files?.trailer?.[0]) {
+      await deleteFromCloudinary(movie.trailer, "video");
+      updates.trailer = req.files.trailer[0].path;
     }
 
     const updated = await Movie.findOneAndUpdate(
@@ -149,11 +166,7 @@ router.post("/:id/comments", async (req, res) => {
     const movie = await Movie.findOne({ id: req.params.id });
     if (!movie) return res.status(404).json({ message: "Movie not found" });
 
-    movie.comments.push({
-      user: user || "Guest",
-      text: text.trim()
-    });
-
+    movie.comments.push({ user: user || "Guest", text: text.trim() });
     await movie.save();
     res.json({ success: true, comments: movie.comments });
   } catch (error) {
@@ -165,7 +178,7 @@ router.post("/:id/comments", async (req, res) => {
 router.use((err, req, res, next) => {
   if (err instanceof multer.MulterError) {
     if (err.code === "LIMIT_FILE_SIZE") {
-      return res.status(400).json({ message: "File too large. Maximum size is 100MB." });
+      return res.status(400).json({ message: "File too large." });
     }
     return res.status(400).json({ message: `Upload error: ${err.message}` });
   }
