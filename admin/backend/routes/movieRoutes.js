@@ -15,33 +15,25 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const posterStorage = new CloudinaryStorage({
+const storage = new CloudinaryStorage({
   cloudinary,
-  params: {
-    folder: "zenix/posters",
-    allowed_formats: ["jpg", "jpeg", "png", "webp"],
-    resource_type: "image",
+  params: async (req, file) => {
+    if (file.fieldname === "trailer") {
+      return {
+        folder: "zenix/trailers",
+        resource_type: "video",
+        allowed_formats: ["mp4", "mov", "avi"],
+      };
+    }
+    return {
+      folder: "zenix/posters",
+      resource_type: "image",
+      allowed_formats: ["jpg", "jpeg", "png", "webp"],
+    };
   },
 });
 
-const trailerStorage = new CloudinaryStorage({
-  cloudinary,
-  params: {
-    folder: "zenix/trailers",
-    allowed_formats: ["mp4", "mov", "avi"],
-    resource_type: "video",
-  },
-});
-
-const uploadPoster = multer({ storage: posterStorage });
-const uploadTrailer = multer({ storage: trailerStorage });
-
-const uploadFields = (req, res, next) => {
-  uploadPoster.single("poster")(req, res, (err) => {
-    if (err) return next(err);
-    uploadTrailer.single("trailer")(req, res, next);
-  });
-};
+const upload = multer({ storage });
 
 const deleteFromCloudinary = async (url, resourceType = "image") => {
   if (!url) return;
@@ -65,16 +57,18 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", uploadFields, async (req, res) => {
+router.post("/", upload.fields([
+  { name: "poster", maxCount: 1 },
+  { name: "trailer", maxCount: 1 }
+]), async (req, res) => {
   try {
-    const body = req.body;
-    const posterUrl = req.files?.poster?.[0]?.path || req.file?.path || null;
+    const posterUrl = req.files?.poster?.[0]?.path || null;
     const trailerUrl = req.files?.trailer?.[0]?.path || null;
 
     const newMovie = await Movie.create({
       id: uuidv4(),
-      ...body,
-      poster: posterUrl,   // now a full https://cloudinary.com/... URL
+      ...req.body,
+      poster: posterUrl,
       trailer: trailerUrl,
       comments: []
     });
@@ -126,7 +120,10 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-router.put("/:id", uploadFields, async (req, res) => {
+router.put("/:id", upload.fields([
+  { name: "poster", maxCount: 1 },
+  { name: "trailer", maxCount: 1 }
+]), async (req, res) => {
   try {
     const movie = await Movie.findOne({ id: req.params.id });
     if (!movie) return res.status(404).json({ message: "Movie not found" });
